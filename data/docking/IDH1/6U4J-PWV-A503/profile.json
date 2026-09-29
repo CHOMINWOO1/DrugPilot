@@ -1,0 +1,112 @@
+{
+  "profiles": [
+    {
+      "box": {
+        "center": [
+          10.91,
+          -4.143,
+          23.671
+        ],
+        "size": [
+          20.922,
+          20.194,
+          19.208
+        ]
+      },
+      "explicit_selection_required": true,
+      "profile_id": "IDH1-R132H-6U4J-PWV-A503-v1",
+      "profile_status": "experimental_smoke_only",
+      "profile_version": "1.0",
+      "production_ready": false,
+      "redocking_validation": {
+        "alignment_applied": false,
+        "artifact": "redocking/validation.json",
+        "artifact_sha256": "668d7e8196029ea766ec65422a59075285326ac9e68164533f35ddec85010c92",
+        "docked_pose_sha256": "484e94631799671a9c120f370da43668d7b8912162d1b692465072f8357ff045",
+        "mapping_method": "exact RCSB component-SDF/PDB heavy-atom element-sequence check; complete chirality-aware RDKit graph isomorphisms; minimum raw coordinate RMSD across symmetry mappings",
+        "passed": true,
+        "prepared_ligand_sha256": "ad4e058592ad6780b497b2bcb4908b71fefeca04a427ead7357e2a99187ce665",
+        "symmetry_mapping_count": 1,
+        "threshold_angstrom": 2.0,
+        "top_ranked_pose_rmsd_angstrom": 0.24809534270740033
+      },
+      "receptor_pdbqt": "receptor.pdbqt",
+      "receptor_source": {
+        "biological_scope": "Human IDH1 R132H mutant homodimer; FT-2102 allosteric co-crystal smoke profile only",
+        "bound_ligand": {
+          "atom_count": 25,
+          "chain": "A",
+          "component_id": "PWV",
+          "residue": 503
+        },
+        "charge_model": "gasteiger",
+        "gemmi_version": "0.7.3",
+        "meeko_version": "0.7.1",
+        "pdb_doi": "10.2210/pdb6U4J/pdb",
+        "preparation_execution": {
+          "executable_name": "mk_prepare_receptor.exe",
+          "executable_version": "usage: mk_prepare_receptor [-h] [--read_pdb PDB_FILENAME]\n                           [--read_pqr PQR_FILENAME] [-i MACROMOL_FILENAME]\n                           [-o OUTPUT_BASENAME] [-p [PDBQT_FILENAME ...]]\n                           [-j […<truncated>",
+          "exit_code": 0,
+          "finished_at": "2026-08-19T06:06:16.242503+00:00",
+          "runtime_seconds": 6.469,
+          "sanitized_argv": [
+            "mk_prepare_receptor.exe",
+            "--read_pdb",
+            "<path:receptor_input.pdb>",
+            "--write_pdbqt",
+            "<path:receptor.pdbqt>",
+            "--write_json",
+            "<path:receptor.json>",
+            "--write_vina_box",
+            "<path:vina_box.txt>",
+            "--box_center",
+            "10.91",
+            "-4.143",
+            "23.671",
+            "--box_size",
+            "20.922",
+            "20.194",
+            "19.208",
+            "--charge_model",
+            "gasteiger",
+            "--allow_bad_res"
+          ],
+          "started_at": "2026-08-19T06:06:09.773396+00:00",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout_excerpt": "\nFiles written:\n <redacted local path>\n<redacted local path>\n  <redacted local path>\n  <redacted local path>",
+          "stdout_sha256": "119faff52822a92e77335c0cbd03c1b519b5c5870d64d453a887453374853161",
+          "timed_out": false,
+          "timeout_seconds": 180.0,
+          "tool_name": "Meeko receptor preparation"
+        },
+        "prepared_receptor_sha256": "1079339a00266a02912fc2c12764edaef0b9e9dbe60e46432c2c21c343b615be",
+        "protein_chains": [
+          "A",
+          "B"
+        ],
+        "rdkit_version": "2026.3.5",
+        "receptor_input_sha256": "5a0aaccdbdc0a37c44f9387073553bceef26ec69a8c64fb11fec4d25dc01823a",
+        "recommended_vina_parameters": {
+          "cpu": 1,
+          "exhaustiveness": 8,
+          "num_modes": 9,
+          "seed": 20260819
+        },
+        "source_pdb_sha256": "2c46a9bdcd4455bbe2328ffb72a091b72fd5a2352a0b4b9daa1193efca7c93a7",
+        "source_url": "https://www.rcsb.org/structure/6U4J",
+        "structure_id": "6U4J",
+        "vina_binary": {
+          "filename": "vina_1.2.7_win.exe",
+          "sha256": "e0c4b2715e0c1a74f6e92d0f3be0328ac97542eafbc111e6b1efad897a73cce5"
+        }
+      },
+      "target_symbol": "IDH1",
+      "uniprot_id": "O75874",
+      "validated": true,
+      "validation_method": "co-crystal ligand PWV A:503 bounding box plus 6 A padding; fixed-seed redocking top-pose heavy-atom RMSD 0.248 A (threshold 2.0 A)",
+      "validation_scope": "single 6U4J/PWV fixed-protocol execution smoke; not a general IDH1 fallback or production docking benchmark"
+    }
+  ],
+  "schema_version": "1.0"
+}

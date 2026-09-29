@@ -1,0 +1,16 @@
+# DrugPilot live MA2 scientific runtime (Windows x86_64, Python 3.12)
+# Installed and smoke-tested on 2026-08-19 in the 8765 validation clone only.
+admet-ai==2.0.0
+chemprop==2.3.1
+torch==2.13.0
+rdkit==2026.3.5
+meeko==0.7.1
+gemmi==0.7.3
+numpy==2.5.2
+scipy==1.18.0
+pandas==3.0.5
+
+# AutoDock Vina is a separate official executable, not a pip dependency.
+# Source: https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_win.exe
+# Expected filename: tools/bin/vina_1.2.7_win.exe
+# SHA-256: E0C4B2715E0C1A74F6E92D0F3BE0328AC97542EAFBC111E6B1EFAD897A73CCE5

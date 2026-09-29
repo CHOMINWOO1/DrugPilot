@@ -1,0 +1,56 @@
+{
+  "fixture": false,
+  "profile": {
+    "profile_id": "IDH1-R132H-6U4J-PWV-A503-candidate-v2",
+    "profile_version": "2.0.0"
+  },
+  "qualification": {
+    "selected_structure_id": "6U4J",
+    "status": "qualified_exact"
+  },
+  "request": {
+    "isoform_accession": null,
+    "organism_tax_id": 9606,
+    "required_mutations": [
+      "R132H"
+    ],
+    "target_symbol": "IDH1",
+    "uniprot_accession": "O75874"
+  },
+  "schema": "drugpilot.qualified-receptor-build-manifest/1.0",
+  "structure": {
+    "box_ligand_components": [
+      "PWV"
+    ],
+    "component_roles": {
+      "CL": "ion",
+      "FLC": "additive",
+      "NAP": "cofactor",
+      "PWV": "binding_ligand"
+    },
+    "path": "source/6U4J.pdb",
+    "sha256": "2c46a9bdcd4455bbe2328ffb72a091b72fd5a2352a0b4b9daa1193efca7c93a7",
+    "source": "rcsb_experimental",
+    "structure_id": "6U4J"
+  },
+  "preparation": {
+    "add_hydrogens_with_pdbfixer": false,
+    "add_missing_residues": false,
+    "box_ligand_instance_id": "PWV:A:503",
+    "cocrystal_box_padding_angstrom": 6.0,
+    "pdbfixer_seed": 20260819,
+    "ph": 7.4,
+    "redocking_rmsd_threshold_angstrom": 2.0,
+    "reference_component_sdf": "source/PWV_ideal.sdf",
+    "reference_component_sha256": "788f350a69c854a99a44e6cc9eaa4d846d75ffde762404f9cbbe1a99994ad35a",
+    "replace_nonstandard_residues": false,
+    "retain_component_instances": [],
+    "retain_water_instances": [],
+    "validation_ligand_sdf": "source/PWV_ideal.sdf",
+    "validation_ligand_sha256": "788f350a69c854a99a44e6cc9eaa4d846d75ffde762404f9cbbe1a99994ad35a",
+    "vina_cpu": 1,
+    "vina_exhaustiveness": 8,
+    "vina_num_modes": 9,
+    "vina_seed": 20260819
+  }
+}

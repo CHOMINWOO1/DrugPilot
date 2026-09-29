@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "drugpilot-local-demo",
+  "version": "0.1.0-demo.1",
+  "title": "DrugPilot local evaluation wiring demo",
+  "classification": "demo_non_production",
+  "description": "Small controlled dataset for testing metric, provenance, and mode-comparison wiring. Labels and universe sizes are illustrative and are not a scientifically validated efficacy benchmark.",
+  "created_at": "2026-08-21T00:00:00Z",
+  "labels_are_illustrative": true,
+  "production_approved": false,
+  "cases": [
+    {
+      "case_id": "demo-aml-001",
+      "disease": "acute myeloid leukemia",
+      "research_goal": "Recover target-linked candidate branches for a controlled local evaluation example.",
+      "attributes": [
+        {"name": "research_depth", "value": "standard"},
+        {"name": "route_scope", "value": "repurposing_and_de_novo"}
+      ],
+      "labels": {
+        "relevant_target_ids": ["FLT3", "IDH1"],
+        "known_candidate_hits": [
+          {
+            "hit_id": "demo-hit-quizartinib",
+            "target_id": "FLT3",
+            "identifiers": ["quizartinib"]
+          },
+          {
+            "hit_id": "demo-hit-ivosidenib",
+            "target_id": "IDH1",
+            "identifiers": ["ivosidenib"]
+          }
+        ],
+        "expected_target_branches": ["FLT3", "IDH1", "DNMT3A"],
+        "target_labels_complete": true,
+        "candidate_labels_complete": true,
+        "target_universe_size": 8,
+        "candidate_universe_size": 20,
+        "annotation_note": "Illustrative local wiring labels only; not a systematic review or clinical efficacy gold standard. Completeness applies only to the declared artificial demo universe."
+      }
+    },
+    {
+      "case_id": "demo-tnbc-001",
+      "disease": "triple-negative breast cancer",
+      "research_goal": "Exercise target-branch and known-hit recovery scoring for a second disease input.",
+      "attributes": [
+        {"name": "research_depth", "value": "standard"},
+        {"name": "normalization_example", "value": "TNBC"}
+      ],
+      "labels": {
+        "relevant_target_ids": ["TACSTD2", "TOP1"],
+        "known_candidate_hits": [
+          {
+            "hit_id": "demo-hit-sacituzumab-govitecan",
+            "target_id": "TACSTD2",
+            "identifiers": ["sacituzumab govitecan"]
+          }
+        ],
+        "expected_target_branches": ["TACSTD2", "TOP1", "BRCA1"],
+        "target_labels_complete": false,
+        "candidate_labels_complete": false,
+        "target_universe_size": 10,
+        "candidate_universe_size": 25,
+        "annotation_note": "Illustrative local wiring labels only. Precision and enrichment are intentionally suppressed because these labels are not exhaustive."
+      }
+    }
+  ]
+}

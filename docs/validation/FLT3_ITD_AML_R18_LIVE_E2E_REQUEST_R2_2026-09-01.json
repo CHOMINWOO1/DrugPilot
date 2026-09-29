@@ -1,0 +1,48 @@
+{
+  "research_goal": "Executable target FLT3 only (canonical human UniProt P36888). Perform a distinct r18 fixture-free live integration validation that dynamically discovers and evaluates up to three non-control existing small molecules with exact human FLT3 inhibitory activity for experimental follow-up in molecularly confirmed FLT3-ITD-positive acute myeloid leukemia. Gilteritinib is reserved only as the pre-specified assay control and must never be ranked or backfilled as a test candidate. This validation may revise, refute, or abstain and does not claim clinical efficacy, safety, novelty, approval, or general discovery performance.",
+  "disease": "Acute myeloid leukemia",
+  "disease_id": "MONDO_0018874",
+  "rationale": "This R2 request preserves the R1 disease, target, intervention, control, assay, pagination, uncertainty and experimental thresholds. It changes only the exact evidence-policy route from a same-publication comparative group to candidate-per-primary-record v6: every promoted candidate must independently bind its own exact ChEMBL activity to its own non-review primary abstract clause before three or more verified members are aggregated in the frozen mechanism-first pool order. Evidence is never copied between candidates, missing members are not backfilled, and no candidate, PMID, value, allowlist, fixture, fallback or expected result is supplied. Missing, conflicting, unavailable or identity-ambiguous evidence remains unknown, partial, excluded, REVISE or ABSTAIN rather than being inferred or synthesized.",
+  "research_depth": "comprehensive",
+  "target_cell_type": "MOLM-13 with molecularly confirmed FLT3-ITD, paired with a pre-specified isogenic FLT3-ITD-corrected comparator generated from the same parental background",
+  "intervention_direction": "inhibit",
+  "chronic_safety_required": false,
+  "druggability_required": true,
+  "discovery_priority": "repurposing_target",
+  "forbidden_targets": [],
+  "forbidden_substructures": [],
+  "forbidden_drugs": [],
+  "forbidden_drug_ids": [],
+  "forbidden_drug_classes": [],
+  "reserved_control_compounds": [
+    {
+      "name": "GILTERITINIB",
+      "registry_ids": [
+        {
+          "namespace": "ChEMBL",
+          "identifier": "CHEMBL3301622"
+        }
+      ]
+    }
+  ],
+  "candidates_per_route": 3,
+  "max_ma1_iterations": 3,
+  "max_rework_loops": 2,
+  "human_priorities": [
+    "dynamic_pubmed_primary_abstract_paper_native_v6_required",
+    "r18_distinct_fixture_free_flt3_itd_positive_path_v1",
+    "실행 표적은 canonical human FLT3/P36888 하나로 고정한다. FLT3-ITD는 사전 선언된 질환·실험 하위군이지 별도의 canonical target identity가 아니며, 다른 표적과 downstream-only readout은 실행 가설이나 직접 target-direction 근거로 승격하지 않는다.",
+    "MA1의 직접 FLT3 억제 방향 주장은 FLT3 자체 또는 FLT3 inhibitor가 개입 주체인 non-review primary 연구의 측정된 결과에, primary FLT3-ITD AML 연관 주장은 별도의 적격 primary target-disease association 구문에 각각 원자적으로 연결한다. 병용, 감작, response modifier, 다중 표적 및 배경 문장은 직접 근거로 승격하지 않는다.",
+    "후보는 production live public-source 경로에서만 동적으로 발견한다. 후보명, PMID, candidate allowlist, 수동 seed, fixture, mock, fallback, 합성 activity·excerpt 및 다른 후보의 근거 교차부착을 금지하고 모든 검색·심사·탈락 provenance를 보존한다.",
+    "GILTERITINIB/CHEMBL3301622는 plate validity와 target-engagement를 위한 reserved control이다. 발견 pool에 나타나도 RESERVED_ASSAY_CONTROL로 분리하고 candidate count, scoring, ranking, backfill, ADMET 및 docking 대상에서 제외하며 control identity와 no-compute provenance를 보존한다.",
+    "ChEMBL mechanism과 activity는 exact human FLT3/P36888 single-protein inhibit 방향에서만 사용한다. activity의 limit=20은 wire page size일 뿐 결과 상한이 아니며 authoritative total_count가 가리키는 offset 0,20,40...의 모든 page를 deterministic하게 읽는다. short, missing, duplicate, non-monotonic page, total_count 변화, timeout, HTTP 오류 또는 partial discard가 있으면 complete result로 사용하지 않고 후보를 주입하거나 제한된 첫 page로 대체하지 않는다.",
+    "각 eligible non-control candidate는 exact candidate alias, FLT3, endpoint, deposited relation, value와 unit이 하나의 모호하지 않은 자기 primary-source clause에 함께 존재하고 그 clause가 동일 후보의 exact ChEMBL activity 및 document provenance에 결속되어야 한다. 후보별 검증이 끝난 뒤 최소 3개를 사전 동결 mechanism-first pool 순서로만 집계한다. review, title-only, background-only, cross-clause, respectively/list ambiguity, 후보 간 alias 충돌, 수치·단위 누락, 후보 간 근거 복사 및 탈락 후보 대체는 fail closed한다.",
+    "후보 간 potency 비교와 순위에는 동일 exact ChEMBL assay ID, exact target, endpoint, literal relation, raw unit, assay binding 및 activity-property context가 모두 일치하는 행만 사용한다. 서로 다른 assay, cell-based와 single-protein, 변이 미상과 명시 FLT3-ITD/WT 결과를 합치거나 단위 변환·pChEMBL만으로 비교가능성을 만들지 않는다.",
+    "각 activity와 primary evidence의 변이 범위를 exact_match, explicit_mismatch, unknown_not_assumed_match 또는 not_declared로 보존한다. FLT3-ITD subtype, insertion 위치, allele burden 또는 동반 변이가 보고되지 않으면 WT나 exact match로 추정하지 않으며 unknown은 후보별 한계와 후속 실험 요구로 남긴다.",
+    "후속 검증은 MOLM-13 FLT3-ITD와 동일 parental background의 사전 지정 isogenic FLT3-ITD-corrected comparator를 같은 plate, 동일 농도 grid와 timepoint에서 비교한다. DMSO 음성대조와 reserved gilteritinib 양성대조를 포함하고 2시간 p-FLT3 및 pSTAT5, 72시간 viability를 최소 3 independent biological days에서 측정하며 plate QC 실패는 invalid/repeat로 처리한다.",
+    "후보의 기전 일치 지지는 valid plate에서 2시간 100 nM p-FLT3 또는 pSTAT5 감소가 DMSO 대비 50% 이상이고 95% CI 하한이 30% 이상이며, 72시간 MOLM-13 viability IC50가 tested range 내 1 µM 이하이고 corrected comparator 대비 선택성 비율이 3 이상이면서 95% CI 하한이 1을 초과할 때만 인정한다. target engagement 부재, comparator의 동일 효과, 비수렴, censoring 또는 CI 미확정은 refute 또는 inconclusive로 보존한다.",
+    "withdrawal, warning, contraindication, interaction, 규제 상태, 만성 안전성 또는 기타 safety coverage가 missing, empty, unavailable, error, stale 또는 identity-conflicted이면 unknown/partial로 보존한다. chronic_safety_required=false는 안전성 입증이나 음성 근거가 아니며 unknown safety를 후보 적격·순위의 긍정 신호로 바꾸지 않는다.",
+    "모든 결론은 후보별 canonical identity, measured activity, exact primary passage, source database와 external ID, origin, role, provenance, assay/variant comparability, reserved-control disposition, safety coverage, 실험 QC 및 불확실성에 추적 가능해야 한다. 근거가 부족하면 gate를 낮추지 않고 REVISE 또는 ABSTAIN한다."
+  ],
+  "fault_injection": "none"
+}

@@ -1,0 +1,10 @@
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+# Preserve byte-pinned scientific fixtures and manifests across platforms.
+*.pdb -text
+*.sdf -text
+*.json -text
+*.csv -text
+*.sha256 -text

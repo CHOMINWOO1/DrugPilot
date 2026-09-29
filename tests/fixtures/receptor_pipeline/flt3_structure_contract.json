@@ -1,0 +1,185 @@
+{
+  "fixture": true,
+  "purpose": "Deterministic schema and ranking contract only; not a live scientific result",
+  "request": {
+    "target_symbol": "FLT3",
+    "uniprot_accession": "P36888",
+    "isoform_accession": "P36888-1",
+    "required_mutations": [],
+    "organism_tax_id": 9606
+  },
+  "rcsb_candidates": [
+    {
+      "structure_id": "FIX-FLT3-HIGH",
+      "source": "rcsb_experimental",
+      "uniprot_accession": "P36888",
+      "isoform_accession": "P36888-1",
+      "organism_tax_id": 9606,
+      "chains": ["A"],
+      "observed_mutations": [],
+      "mutation_annotation_complete": true,
+      "quality": {
+        "experimental_method": "X-RAY DIFFRACTION",
+        "resolution_angstrom": 2.0,
+        "r_free": 0.22,
+        "r_work": 0.18,
+        "sequence_coverage": 0.96,
+        "completeness_percent": 99.0,
+        "mean_b_factor": 32.0,
+        "release_date": "2025-01-01",
+        "revision_date": "2025-01-01"
+      },
+      "components": [
+        {
+          "component_id": "TST",
+          "role": "binding_ligand",
+          "chain_id": "A",
+          "residue_number": 900,
+          "atom_count": 24,
+          "suitable_for_box": true,
+          "occupancy": 1.0,
+          "mean_b_factor": 28.0
+        },
+        {
+          "component_id": "MG",
+          "role": "metal",
+          "chain_id": "A",
+          "residue_number": 901,
+          "atom_count": 1,
+          "suitable_for_box": false,
+          "occupancy": 1.0,
+          "mean_b_factor": 22.0
+        }
+      ],
+      "waters": 120,
+      "missing_residues": [],
+      "missing_binding_site_residues": [],
+      "source_hashes": {
+        "fixture_manifest_sha256": "contract-fixture-not-source-data"
+      },
+      "provenance": {
+        "fixture": true,
+        "scientific_result": false
+      },
+      "fixture": true
+    },
+    {
+      "structure_id": "FIX-FLT3-LOW",
+      "source": "rcsb_experimental",
+      "uniprot_accession": "P36888",
+      "isoform_accession": "P36888-1",
+      "organism_tax_id": 9606,
+      "chains": ["A"],
+      "observed_mutations": [],
+      "mutation_annotation_complete": true,
+      "quality": {
+        "experimental_method": "X-RAY DIFFRACTION",
+        "resolution_angstrom": 3.1,
+        "r_free": 0.31,
+        "r_work": 0.27,
+        "sequence_coverage": 0.91,
+        "completeness_percent": 94.0,
+        "mean_b_factor": 49.0,
+        "release_date": "2024-01-01",
+        "revision_date": "2024-01-01"
+      },
+      "components": [
+        {
+          "component_id": "TST",
+          "role": "binding_ligand",
+          "chain_id": "A",
+          "residue_number": 901,
+          "atom_count": 24,
+          "suitable_for_box": true,
+          "occupancy": 0.8,
+          "mean_b_factor": 45.0
+        }
+      ],
+      "waters": 40,
+      "missing_residues": [],
+      "missing_binding_site_residues": [],
+      "source_hashes": {
+        "fixture_manifest_sha256": "contract-fixture-not-source-data"
+      },
+      "provenance": {
+        "fixture": true,
+        "scientific_result": false
+      },
+      "fixture": true
+    },
+    {
+      "structure_id": "FIX-FLT3-MUTATION-MISMATCH",
+      "source": "rcsb_experimental",
+      "uniprot_accession": "P36888",
+      "isoform_accession": "P36888-1",
+      "organism_tax_id": 9606,
+      "chains": ["A"],
+      "observed_mutations": ["D835Y"],
+      "mutation_annotation_complete": true,
+      "quality": {
+        "experimental_method": "X-RAY DIFFRACTION",
+        "resolution_angstrom": 1.8,
+        "r_free": 0.19,
+        "r_work": 0.16,
+        "sequence_coverage": 0.98,
+        "completeness_percent": 100.0,
+        "mean_b_factor": 25.0,
+        "release_date": "2025-01-01",
+        "revision_date": "2025-01-01"
+      },
+      "components": [
+        {
+          "component_id": "TST",
+          "role": "binding_ligand",
+          "chain_id": "A",
+          "residue_number": 902,
+          "atom_count": 24,
+          "suitable_for_box": true,
+          "occupancy": 1.0,
+          "mean_b_factor": 20.0
+        }
+      ],
+      "waters": 160,
+      "missing_residues": [],
+      "missing_binding_site_residues": [],
+      "source_hashes": {
+        "fixture_manifest_sha256": "contract-fixture-not-source-data"
+      },
+      "provenance": {
+        "fixture": true,
+        "scientific_result": false
+      },
+      "fixture": true
+    }
+  ],
+  "alphafold_candidate": {
+    "structure_id": "AF-FIX-FLT3",
+    "source": "alphafold_predicted",
+    "uniprot_accession": "P36888",
+    "isoform_accession": "P36888-1",
+    "organism_tax_id": 9606,
+    "chains": ["A"],
+    "observed_mutations": [],
+    "mutation_annotation_complete": true,
+    "quality": {
+      "experimental_method": "PREDICTED",
+      "resolution_angstrom": null,
+      "r_free": null,
+      "r_work": null,
+      "sequence_coverage": 1.0,
+      "global_confidence": 82.0
+    },
+    "components": [],
+    "waters": 0,
+    "missing_residues": [],
+    "missing_binding_site_residues": [],
+    "source_hashes": {
+      "fixture_manifest_sha256": "contract-fixture-not-source-data"
+    },
+    "provenance": {
+      "fixture": true,
+      "scientific_result": false
+    },
+    "fixture": true
+  }
+}

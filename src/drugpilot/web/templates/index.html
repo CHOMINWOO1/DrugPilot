@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DrugPilot 신약 후보 탐색 및 검증 워크벤치">
+  <title>DrugPilot 연구 워크벤치</title>
+  <link rel="stylesheet" href="/static/app.css?v=20260929-ma3-admission-v1">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">본문으로 바로가기</a>
+
+  <header class="app-header">
+    <div class="brand" aria-label="DrugPilot 홈">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 42 42" role="img"><path d="M14 8v10.5L6.7 31.1A3.3 3.3 0 0 0 9.6 36h22.8a3.3 3.3 0 0 0 2.9-4.9L28 18.5V8"/><path d="M11.8 25h18.4"/><circle cx="17" cy="29" r="1.7"/><circle cx="25" cy="32" r="1.2"/></svg>
+      </span>
+      <span>
+        <strong>DrugPilot</strong>
+        <small>Evidence-governed Virtual Lab</small>
+      </span>
+    </div>
+
+    <div class="header-actions">
+      <div id="modeBadge" class="mode-badge is-checking" title="현재 LLM 백엔드 확인 중">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="modeBadgeText">LLM · 확인 중</span>
+      </div>
+      <div id="dataBadge" class="data-badge is-checking" title="현재 과학 데이터 백엔드 확인 중">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="dataBadgeText">DATA · 확인 중</span>
+      </div>
+      <div id="healthBadge" class="health-badge is-checking" aria-live="polite">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="healthText">연결 확인 중</span>
+      </div>
+      <button id="newRunMobile" class="button primary compact mobile-only" type="button">새 연구</button>
+    </div>
+  </header>
+
+  <main id="main-content" class="app-shell">
+    <aside class="sidebar" aria-label="연구 실행 제어">
+      <section class="sidebar-section create-section">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">RESEARCH BRIEF</span>
+            <h1>새 연구 실행</h1>
+          </div>
+          <button id="closeSidebar" class="icon-button mobile-only" type="button" aria-label="사이드바 닫기">×</button>
+        </div>
+
+        <form id="researchForm" novalidate>
+          <div id="backendNote" class="server-mode-note">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="server-mode-copy">
+              <b id="backendSummaryTitle">LLM · DATA 확인 중</b>
+              <small id="backendSummaryText">API 키는 브라우저가 아닌 서버의 .env에서만 관리</small>
+            </span>
+          </div>
+
+          <button id="openSourceCatalog" class="source-catalog-button" type="button" aria-haspopup="dialog">
+            <span class="source-catalog-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <ellipse cx="12" cy="5.5" rx="7.5" ry="3"></ellipse>
+                <path d="M4.5 5.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"></path>
+                <path d="M4.5 11.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"></path>
+              </svg>
+            </span>
+            <span>
+              <b id="sourceCatalogButtonTitle">DATA SOURCES</b>
+              <small id="sourceCatalogButtonText">소스 레지스트리를 불러오는 중</small>
+            </span>
+            <span class="source-catalog-arrow" aria-hidden="true">›</span>
+          </button>
+
+          <details id="scientificToolsPanel" class="scientific-tools-panel">
+            <summary class="scientific-tools-toggle" aria-labelledby="scientificToolsTitle scientificToolsSummary">
+              <span class="scientific-tools-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                  <path d="M9 3h6"></path>
+                  <path d="M10 3v6l-5.2 8.5A2.3 2.3 0 0 0 6.8 21h10.4a2.3 2.3 0 0 0 2-3.5L14 9V3"></path>
+                  <path d="M7.2 15h9.6"></path>
+                  <circle cx="10" cy="17.8" r=".7"></circle>
+                  <circle cx="14.6" cy="18.2" r=".5"></circle>
+                </svg>
+              </span>
+              <span>
+                <b id="scientificToolsTitle">SCIENTIFIC TOOLS</b>
+                <small id="scientificToolsSummary">RUNTIME STATUS CHECK</small>
+              </span>
+              <span class="scientific-tools-chevron" aria-hidden="true">⌄</span>
+            </summary>
+            <div id="scientificToolsList" class="scientific-tools-list" aria-live="polite">
+              <div class="scientific-tool-loading"><span class="status-dot" aria-hidden="true"></span>서버 상태 확인 중</div>
+            </div>
+          </details>
+
+          <fieldset class="research-depth-field" aria-describedby="researchDepthDescription researchDepthBoundary">
+            <legend>RESEARCH DEPTH</legend>
+            <div class="research-depth-options">
+              <label>
+                <input name="research_depth" type="radio" value="focused">
+                <span><b>Focused</b><small>핵심 확인</small></span>
+              </label>
+              <label>
+                <input name="research_depth" type="radio" value="standard" checked>
+                <span><b>Standard</b><small>권장</small></span>
+              </label>
+              <label>
+                <input name="research_depth" type="radio" value="comprehensive">
+                <span><b>Comprehensive</b><small>확장 분석</small></span>
+              </label>
+            </div>
+            <p id="researchDepthDescription" class="research-depth-description" aria-live="polite">
+              관련 근거와 적용 가능한 도구를 넓게 조회 · 균형 잡힌 교차 검토
+            </p>
+            <p id="researchDepthBoundary" class="research-depth-boundary">
+              근거·도구 범위, 검토 강도와 소요시간을 조절합니다.
+            </p>
+          </fieldset>
+
+          <div class="form-field">
+            <label for="disease">대상 질환 <span aria-hidden="true">*</span></label>
+            <input id="disease" name="disease" type="text" value="Acute myeloid leukemia" required minlength="2" autocomplete="off">
+            <p class="field-hint">질환명 또는 질환 식별자</p>
+          </div>
+
+          <div class="form-field">
+            <label for="researchGoal">연구 목표 <span aria-hidden="true">*</span></label>
+            <textarea id="researchGoal" name="research_goal" rows="4" required minlength="10">Identify evidence-supported molecular targets and propose experimentally testable drug candidates for acute myeloid leukemia.</textarea>
+          </div>
+
+          <div class="form-grid two-cols direction-inputs">
+            <div class="form-field">
+              <label for="cellType">세포 유형</label>
+              <input id="cellType" name="target_cell_type" type="text" value="AML cell lines" autocomplete="off">
+            </div>
+            <div class="form-field">
+              <label for="direction">작용 방향</label>
+              <select id="direction" name="intervention_direction" aria-describedby="directionDescription directionSummary">
+                <option value="inhibit">억제 (Inhibit)</option>
+                <option value="activate">활성화 (Activate)</option>
+                <option value="modulate">조절 · 양방향 탐색 (Modulate)</option>
+                <option value="unspecified">미지정 · 자동 방향 탐색</option>
+              </select>
+            </div>
+          </div>
+
+          <section class="direction-settings" aria-label="작용 방향 상세">
+            <p id="directionDescription" aria-live="polite">억제 방향의 직접 개입 근거를 확인합니다.</p>
+            <div id="directionScopeField" class="form-field compact-field" hidden>
+              <label for="directionScope">최종 가설로 허용할 방향</label>
+              <select id="directionScope" aria-describedby="directionScopeHint" disabled>
+                <option value="all">모두 · 근거에 따라 결정</option>
+                <option value="both">억제·활성화만</option>
+                <option value="inhibit">억제만</option>
+                <option value="activate">활성화만</option>
+              </select>
+              <p id="directionScopeHint" class="field-hint">검색 범위가 아닌 가설 채택 조건입니다. 직접 근거가 없는 방향은 남기지 않습니다.</p>
+              <p id="directionCapabilityNotice" class="field-hint" hidden>상세 방향 설정의 서버 지원 여부를 확인 중입니다.</p>
+            </div>
+            <p id="directionSummary" class="direction-summary" aria-live="polite">최종 가설: 억제 · 직접 1차 근거 필수</p>
+            <details class="direction-explanation">
+              <summary>검색·판정 방식 보기</summary>
+              <p id="directionSearchDescription">억제제·차단·knockdown·silencing 등 관련 개입 표현을 함께 검색합니다.</p>
+              <p>검색어 일치만으로 통과하지 않습니다. 표적·질환·개입·측정 결과와 원문 연결을 확인하며, 단순 연관성이나 하위 신호 변화만으로 방향을 확정하지 않습니다.</p>
+              <p>조절과 미지정은 현재 같은 넓은 탐색 방식을 사용하며 원래 선택값을 기록합니다. 상세 설정은 다음 새 실행에만 적용되고, 이전 결과를 변경하지 않습니다.</p>
+            </details>
+          </section>
+
+          <div class="form-grid two-cols">
+            <div class="form-field">
+              <label for="candidateCount">표적별 경로 후보 수</label>
+              <div class="number-control">
+                <button type="button" data-step="-5" aria-label="후보 수 5 감소">−</button>
+                <input id="candidateCount" name="candidates_per_route" type="number" value="5" min="1" max="100" step="1">
+                <button type="button" data-step="5" aria-label="후보 수 5 증가">+</button>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="faultInjection">장애 주입</label>
+              <select id="faultInjection" name="fault_injection">
+                <option value="none">없음 · 정상 경로</option>
+                <optgroup label="G0 가설 감사">
+                  <option value="g0_missing_evidence">근거 누락</option>
+                </optgroup>
+                <optgroup label="G1 후보·과정 감사">
+                  <option value="g1_ic50_unit">IC50 단위 오류</option>
+                  <option value="g1_invalid_smiles">잘못된 SMILES</option>
+                  <option value="g1_direction_mismatch">작용 방향 불일치</option>
+                  <option value="g1_plan_trace_mismatch">계획-실행 추적 불일치</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <details class="advanced-options">
+            <summary>고급 제약조건</summary>
+            <div class="advanced-body">
+              <label class="check-row">
+                <input id="chronicSafety" type="checkbox" checked>
+                <span><b>만성 안전성 요구</b><small>장기 투여 관련 안전성 플래그 검사</small></span>
+              </label>
+              <label class="check-row">
+                <input id="druggability" type="checkbox" checked>
+                <span><b>Druggability 요구</b><small>표적의 약물화 가능성 확인</small></span>
+              </label>
+              <div class="form-field compact-field">
+                <label for="discoveryPriority">표적 탐색 우선순위</label>
+                <select id="discoveryPriority" name="discovery_priority">
+                  <option value="auto" selected>자동 · MA1 최상위 표적</option>
+                  <option value="novel_target">신규 표적 우선 · 근거 충족 표적</option>
+                  <option value="repurposing_target">재창출 표적 우선 · 강한 약물 근거 표적</option>
+                </select>
+                <p class="field-hint">경로를 강제로 지정하지 않습니다. G0를 통과하고 식별자가 확인된 각 표적에 동일한 근거 기반 경로 정책을 적용합니다.</p>
+              </div>
+              <div class="form-field compact-field">
+                <label for="priorities">연구자 우선순위</label>
+                <input id="priorities" type="text" placeholder="예: Pharos TDL, single-cell, network, safety">
+                <p class="field-hint">쉼표로 구분 · 명시한 맥락은 Source Router의 필요 시 조회 조건으로 사용</p>
+              </div>
+              <div class="form-field compact-field">
+                <label for="forbiddenDrugs">재창출 금지 약물명</label>
+                <input id="forbiddenDrugs" type="text" placeholder="예: Drug A, Drug B">
+                <p class="field-hint">약물명 정확 일치 · 쉼표로 구분</p>
+              </div>
+              <div class="form-field compact-field">
+                <label for="forbiddenDrugIds">금지 약물 식별자</label>
+                <input id="forbiddenDrugIds" type="text" placeholder="예: CHEMBL123, DB00001">
+                <p class="field-hint">ChEMBL·DrugBank 등 정확 식별자</p>
+              </div>
+              <div class="form-field compact-field">
+                <label for="forbiddenDrugClasses">금지 약물 계열</label>
+                <input id="forbiddenDrugClasses" type="text" placeholder="예: withdrawn kinase inhibitor">
+                <p class="field-hint">원천 메타데이터의 계열명과 정확 일치</p>
+              </div>
+            </div>
+          </details>
+
+          <div id="formError" class="form-error" role="alert" hidden></div>
+          <button id="runButton" class="button primary run-button" type="submit">
+            <span class="button-icon" aria-hidden="true">▶</span>
+            <span>연구 실행</span>
+          </button>
+          <p class="submit-note">각 단계의 산출물과 감사 판단을 실시간 기록</p>
+        </form>
+      </section>
+
+      <section class="sidebar-section history-section">
+        <div class="section-heading history-heading">
+          <div>
+            <span class="eyebrow">RUN HISTORY</span>
+            <h2>최근 실행</h2>
+          </div>
+          <button id="refreshRuns" class="icon-button" type="button" aria-label="실행 목록 새로고침" title="새로고침">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8.1 8.1 0 1 0-2.4 5.8M20 4v7h-7"/></svg>
+          </button>
+        </div>
+        <div id="runList" class="run-list" aria-live="polite">
+          <div class="list-skeleton"><span></span><span></span><span></span></div>
+        </div>
+      </section>
+    </aside>
+
+    <section class="workspace" aria-label="실행 결과">
+      <div id="welcomeState" class="welcome-state">
+        <div class="welcome-copy">
+          <span class="eyebrow">EVIDENCE-GOVERNED DISCOVERY</span>
+          <h2>질환 근거부터<br>후보 평가까지<br><span class="welcome-product">DrugPilot</span></h2>
+          <p>From disease evidence and hypothesis discovery to candidate evaluation, independent audit and human decision—every result remains linked to its data and execution trace.</p>
+          <div class="welcome-actions">
+            <button id="showArchitecture" class="button secondary" type="button">VIEW WORKFLOW</button>
+          </div>
+        </div>
+        <div class="welcome-visual" role="img" aria-label="Evidence Governance를 중심으로 MA1 가설, MA2 후보, MA3 독립 감사, 연구자 결정을 연결한 DrugPilot 핵심 흐름">
+          <div class="orbit orbit-one" aria-hidden="true"></div>
+          <div class="orbit orbit-two" aria-hidden="true"></div>
+          <div class="lab-core">
+            <span class="core-icon" aria-hidden="true">⌬</span>
+            <b>Evidence<br>Governance</b>
+          </div>
+          <div class="orbit-card card-ma1"><span>01</span><b>Hypothesis</b><small>MA1</small></div>
+          <div class="orbit-card card-ma2"><span>02</span><b>Candidates</b><small>MA2</small></div>
+          <div class="orbit-card card-ma3"><span>03</span><b>Independent Audit</b><small>MA3</small></div>
+          <div class="orbit-card card-human"><span>✓</span><b>Human Gate</b><small>Decision</small></div>
+        </div>
+        <div class="principle-row">
+          <article><span>01</span><div><b>Evidence-linked</b><small>Claims, evidence and counter-evidence</small></div></article>
+          <article><span>02</span><div><b>Audit-driven</b><small>Independent artifact and process review</small></div></article>
+          <article><span>03</span><div><b>Human-controlled</b><small>Researcher approval before completion</small></div></article>
+        </div>
+      </div>
+
+      <div id="runWorkspace" class="run-workspace" hidden>
+        <section class="run-hero run-context">
+          <div class="run-title-group">
+            <div class="run-kicker">
+              <span id="runStatusPill" class="status-pill running"><span class="status-dot"></span> 실행 중</span>
+              <span id="runDepthPill" class="research-depth-pill is-unrecorded" title="이 실행의 Research Depth">깊이 미기록</span>
+              <button id="copyRunId" class="run-id" type="button" title="실행 ID 복사">RUN <span id="runIdText">—</span></button>
+            </div>
+            <h2 id="runDisease">연구 실행</h2>
+            <details class="run-goal-details"><summary>연구 목표 · 입력 원문</summary><p id="runGoal">연구 목표를 불러오는 중입니다.</p></details>
+          </div>
+          <div class="hero-actions">
+            <button id="cancelRunButton" class="button secondary compact" type="button" hidden>실행 중단</button>
+            <span id="cancelRunNotice" class="cancel-run-notice" role="status" hidden></span>
+            <button id="resumeButton" class="button secondary compact" type="button" hidden>체크포인트에서 재개</button>
+            <button id="openHumanGate" class="button human compact" type="button" disabled>
+              <span aria-hidden="true">✓</span> 기존 검토 결정
+            </button>
+          </div>
+        </section>
+
+        <section id="intakeNotice" class="intake-notice" role="status" aria-live="polite" hidden>
+          <span id="intakeNoticeIcon" class="intake-notice-icon" aria-hidden="true">!</span>
+          <div class="intake-notice-copy">
+            <b id="intakeNoticeTitle">연구 입력 확인 필요</b>
+            <p id="intakeNoticeText"></p>
+            <ul id="intakeNoticeItems" hidden></ul>
+            <small id="intakeNoticeAction"></small>
+          </div>
+        </section>
+
+        <section id="researchResultPanel" class="research-result-panel" aria-labelledby="researchResultTitle" aria-live="polite">
+          <header class="research-result-header">
+            <div><span class="eyebrow">RESEARCH RESULTS</span><h3 id="researchResultTitle">결과 상태 확인 중</h3><p id="researchResultSummary">저장된 분석 결과와 채택 가능 여부를 확인합니다.</p></div>
+            <button id="openResearchSelection" class="button primary" type="button" disabled>연구후보 채택</button>
+          </header>
+          <div id="researchResultStates" class="research-result-states"></div>
+          <p class="research-result-caution">연구후보 채택은 후속 연구 우선순위 결정입니다. 약효·안전성 승인이나 실험 검증 완료를 뜻하지 않습니다.</p>
+          <div class="result-candidate-heading"><h4 id="resultCandidateTitle">후보 기록</h4><button class="text-button" type="button" data-summary-tab="candidates">전체 후보 · 근거 비교 <span id="resultCandidateCount">0</span></button></div>
+          <p class="result-comparison-note">서로 다른 실험 조건의 활성값은 직접 효능 비교가 아닙니다.</p>
+          <div id="resultCandidateCards" class="result-candidate-grid"><p class="summary-placeholder">후보 기록을 확인하는 중입니다.</p></div>
+          <div id="researchResultDetails"></div>
+        </section>
+
+        <details id="pipelineSection" class="pipeline-panel workflow-strip" aria-labelledby="pipelineTitle">
+          <summary class="panel-heading">
+            <div>
+              <h3 id="pipelineTitle">Workflow · 실행 과정 상세</h3>
+            </div>
+            <div id="pipelineSummary" class="pipeline-summary" aria-live="polite">연구 입력 검증 중</div>
+          </summary>
+
+          <div id="pipeline" class="pipeline" role="group" aria-label="연구 진행 단계">
+            <button class="stage-node" type="button" data-stage="brief_validated" data-artifact="brief">
+              <span class="stage-number">01</span>
+              <span class="stage-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M9 4h10l5 5v19H9z"/><path d="M19 4v6h5M13 15h7M13 20h7"/></svg></span>
+              <span class="stage-copy"><b>Research Brief</b><small>목표·제약조건</small></span>
+              <span class="stage-check" aria-hidden="true">✓</span>
+            </button>
+            <span class="pipeline-link" aria-hidden="true"><i></i></span>
+            <button class="stage-node ma1" type="button" data-stage="ma1" data-artifact="hypotheses">
+              <span class="stage-number">02</span>
+              <span class="stage-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 5a8 8 0 0 0-5 14.2V23h10v-3.8A8 8 0 0 0 16 5zM12 27h8M16 1v2M4 14H1M31 14h-3M7 5l2 2M25 5l-2 2"/></svg></span>
+              <span class="stage-copy"><b>MA1</b><small>Hypothesis Discovery</small></span>
+              <span class="stage-check" aria-hidden="true">✓</span>
+            </button>
+            <span class="pipeline-link" aria-hidden="true"><i></i></span>
+            <button class="stage-node audit" type="button" data-stage="g0" data-artifact="audits">
+              <span class="stage-number">03</span>
+              <span class="stage-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m16 3 11 4v8c0 7-4.8 11.7-11 14C9.8 26.7 5 22 5 15V7z"/><path d="m11 16 3 3 7-7"/></svg></span>
+              <span class="stage-copy"><b>G0 · MA3</b><small>Hypothesis Audit</small></span>
+              <span class="stage-check" aria-hidden="true">✓</span>
+            </button>
+            <span class="pipeline-link" aria-hidden="true"><i></i></span>
+            <button class="stage-node planner" type="button" data-stage="planner" data-artifact="plan">
+              <span class="stage-number">04</span>
+              <span class="stage-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M7 5h18v23H7zM11 10h10M11 15h10M11 20h6"/></svg></span>
+              <span class="stage-copy"><b>Planner</b><small>Plan Specification</small></span>
+              <span class="stage-check" aria-hidden="true">✓</span>
+            </button>
+            <span class="pipeline-link" aria-hidden="true"><i></i></span>
+            <button class="stage-node ma2 adaptive" type="button" data-stage="ma2" data-artifact="candidates">
+              <span class="stage-number">05</span>
+              <span class="stage-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M6 16h7M19 16h7M16 6v7M16 19v7"/><circle cx="16" cy="16" r="4"/><circle cx="5" cy="16" r="2"/><circle cx="27" cy="16" r="2"/><circle cx="16" cy="5" r="2"/><circle cx="16" cy="27" r="2"/></svg></span>
+              <span class="stage-copy"><b>MA2</b><small>Candidate Discovery</small><em>Target-wise evidence routing</em></span>
+              <span class="stage-check" aria-hidden="true">✓</span>
+            </button>
+            <span class="pipeline-link" aria-hidden="true"><i></i></span>
+            <button class="stage-node audit" type="button" data-stage="g1" data-artifact="audits">
+              <span class="stage-number">06</span>
+              <span class="stage-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m16 3 11 4v8c0 7-4.8 11.7-11 14C9.8 26.7 5 22 5 15V7z"/><path d="m11 16 3 3 7-7"/></svg></span>
+              <span class="stage-copy"><b>G1 · MA3</b><small>Candidate &amp; Process Audit</small></span>
+              <span class="stage-check" aria-hidden="true">✓</span>
+            </button>
+            <span class="pipeline-link" aria-hidden="true"><i></i></span>
+            <button class="stage-node human" type="button" data-stage="human_gate" data-artifact="overview">
+              <span class="stage-number">07</span>
+              <span class="stage-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="10" r="5"/><path d="M7 28c0-6 3.7-10 9-10s9 4 9 10"/></svg></span>
+              <span class="stage-copy"><b>Human Gate</b><small>Approve · Hold · Reject</small></span>
+              <span class="stage-check" aria-hidden="true">✓</span>
+            </button>
+          </div>
+
+          <div id="reworkRibbon" class="rework-ribbon" hidden>
+            <span class="rework-icon" aria-hidden="true">↺</span>
+            <div><b id="reworkTitle">수정 요청</b><span id="reworkText">이전 단계로 선택적 회귀</span></div>
+          </div>
+        </details>
+
+        <section id="discoverySummary" class="discovery-summary" aria-labelledby="discoverySummaryTitle">
+          <header class="summary-header">
+            <div>
+              <h3 id="discoverySummaryTitle">Discovery Summary</h3>
+              <p>이번 실행에서 확인된 핵심 연구 결과</p>
+            </div>
+            <span id="discoverySummaryStatus" class="summary-status">결과 집계 중</span>
+          </header>
+          <div class="summary-counts" aria-label="핵심 결과 수">
+            <span><strong id="discoveryEvidenceCount">0</strong> Retained evidence records</span>
+            <span><strong id="discoveryHypothesisCount">0</strong> Hypotheses</span>
+            <span><strong id="discoveryTargetCount">0/0</strong> <span id="discoveryTargetCountLabel">Target coverage</span></span>
+            <span><strong id="discoveryCandidateCount">0</strong> Candidates</span>
+          </div>
+          <details class="summary-supporting"><summary>가설·선두 후보 상세 보기</summary><div class="summary-findings">
+            <article class="summary-finding" aria-labelledby="topHypothesisTitle">
+              <div class="summary-finding-heading">
+                <h4 id="topHypothesisTitle">Top Hypothesis</h4>
+                <button class="text-button" type="button" data-summary-tab="hypotheses">전체 가설 비교</button>
+              </div>
+              <div id="topHypothesisContent" class="summary-finding-content">
+                <p class="summary-placeholder">MA1 가설을 기다리는 중입니다.</p>
+              </div>
+            </article>
+            <article class="summary-finding" aria-labelledby="topCandidateTitle">
+              <div class="summary-finding-heading">
+                <h4 id="topCandidateTitle">Top Candidate</h4>
+                <button class="text-button" type="button" data-summary-tab="candidates">전체 후보 비교</button>
+              </div>
+              <div id="topCandidateContent" class="summary-finding-content">
+                <p class="summary-placeholder">MA2 후보 평가를 기다리는 중입니다.</p>
+              </div>
+            </article>
+          </div></details>
+        </section>
+
+        <details id="nextActionPanel" class="next-action-panel" aria-labelledby="nextActionTitle" hidden>
+          <summary class="next-action-header">
+            <div>
+              <span class="eyebrow">Audit follow-up</span>
+              <h3 id="nextActionTitle">다음 조치</h3>
+              <p id="nextActionSummary">미해결 감사 항목과 재진입 조건</p>
+            </div>
+            <span id="nextActionDisposition" class="summary-status abstained">HOLD</span>
+          </summary>
+          <div id="nextActionContent" class="next-action-content"></div>
+        </details>
+
+        <section class="content-grid scientific-review-grid">
+          <article class="verdict-panel audit-workbench">
+            <div class="panel-heading">
+              <div><h3>Scientific Quality Assurance</h3><p>MA3 read-only audit</p></div>
+              <div class="gate-toggle" role="tablist" aria-label="감사 단계">
+                <button id="gateTabG0" type="button" role="tab" data-gate="g0" aria-controls="verdictContent" aria-selected="true">G0</button>
+                <button id="gateTabG1" type="button" role="tab" data-gate="g1" aria-controls="verdictContent" aria-selected="false">G1</button>
+              </div>
+            </div>
+            <div id="verdictContent" class="verdict-content" role="tabpanel" aria-labelledby="gateTabG0" tabindex="0">
+              <div class="empty-verdict">
+                <span class="shield-empty" aria-hidden="true">◇</span>
+                <b>감사 대기</b>
+                <p>MA3가 산출물과 실행 추적을 읽기 전용으로 검증합니다.</p>
+              </div>
+            </div>
+          </article>
+
+          <details id="executionTracePanel" class="activity-panel execution-trace-panel">
+            <summary>
+              <span><b>Execution trace</b><small id="executionTraceSummary">실행 이벤트 집계 중</small></span>
+              <span id="liveIndicator" class="live-indicator"><i></i> LIVE</span>
+            </summary>
+            <div class="execution-trace-body">
+              <section class="metrics-grid run-metadata-line" aria-label="실행 메타데이터">
+                <article class="metric-card">
+                  <div class="metric-icon tokens" aria-hidden="true">T</div>
+                  <div><span>누적 토큰</span><strong id="metricTokens">0</strong><small id="metricTokenBudget">예산의 0%</small></div>
+                </article>
+                <button id="openToolTrace" class="metric-card metric-card-action" type="button" aria-haspopup="dialog" title="호출된 모델·공개 DB·과학 계산 도구 상세 보기">
+                  <div class="metric-icon calls" aria-hidden="true">↗</div>
+                  <div><span>모델 / 도구 실행</span><strong id="metricCalls">0</strong><small id="metricCallDetail">모델 0 · 도구 0 · 상세 보기</small></div>
+                  <span class="metric-card-cue" aria-hidden="true">›</span>
+                </button>
+                <article class="metric-card">
+                  <div class="metric-icon cost" aria-hidden="true">$</div>
+                  <div><span>추정 API 비용</span><strong id="metricCost">$0.00</strong><small id="metricCostKrw">약 ₩0</small></div>
+                </article>
+                <article class="metric-card">
+                  <div class="metric-icon audit-score" aria-hidden="true">✓</div>
+                  <div><span>자동 감사 판정</span><strong id="metricAudit">대기</strong><small id="metricAuditDetail">G0 — · G1 —</small></div>
+                </article>
+              </section>
+              <div class="activity-controls">
+                <p>Agent handoff, database query, scientific tool, retry and audit events</p>
+                <button id="clearActivityFilter" class="text-button" type="button" hidden>필터 해제</button>
+              </div>
+              <div id="activityFeed" class="activity-feed" aria-live="polite" aria-relevant="additions">
+                <div class="empty-activity">
+                  <span aria-hidden="true">⌁</span>
+                  <b>실행 이벤트를 기다리는 중</b>
+                  <small>업무 지시, 산출물 전달, 판정 근거와 선택적 환류가 표시됩니다.</small>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="artifact-panel research-artifacts">
+          <div class="artifact-header">
+            <div>
+              <h3>Research Artifacts</h3>
+              <p>결과 비교, 근거 검토 및 감사 추적</p>
+            </div>
+            <button id="downloadRun" class="button secondary compact" type="button" title="감사·재현용 전체 실행 스냅샷을 JSON으로 저장">
+              <span aria-hidden="true">↓</span> 원본 JSON 저장
+            </button>
+          </div>
+          <div class="artifact-tabs" role="tablist" aria-label="산출물 유형">
+            <button id="artifactTabOverview" type="button" role="tab" data-tab="overview" aria-controls="artifactContent" aria-selected="true" tabindex="0">Overview</button>
+            <button id="artifactTabHypotheses" type="button" role="tab" data-tab="hypotheses" aria-controls="artifactContent" aria-selected="false" tabindex="-1">MA1 Results <span id="hypothesisCount">Retained 0</span></button>
+            <button id="artifactTabPlan" type="button" role="tab" data-tab="plan" aria-controls="artifactContent" aria-selected="false" tabindex="-1">Plan</button>
+            <button id="artifactTabCandidates" type="button" role="tab" data-tab="candidates" aria-controls="artifactContent" aria-selected="false" tabindex="-1">Candidates <span id="candidateCountBadge">0</span></button>
+            <button id="artifactTabAudits" type="button" role="tab" data-tab="audits" aria-controls="artifactContent" aria-selected="false" tabindex="-1">Audit <span id="findingCount">0</span></button>
+            <button id="artifactTabReport" type="button" role="tab" data-tab="report" aria-controls="artifactContent" aria-selected="false" tabindex="-1">RUN REPORT</button>
+          </div>
+          <div id="artifactContent" class="artifact-content" role="tabpanel" aria-labelledby="artifactTabOverview" tabindex="0"></div>
+        </section>
+
+        <aside id="contextPanel" class="context-panel" aria-labelledby="contextPanelTitle" hidden>
+          <header class="context-panel-header">
+            <div><span id="contextPanelKicker">Evidence detail</span><h3 id="contextPanelTitle">Context</h3></div>
+            <button id="closeContextPanel" class="icon-button" type="button" aria-label="상세 패널 닫기">×</button>
+          </header>
+          <div id="contextPanelContent" class="context-panel-content"></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="researchSelectionDialog" class="decision-dialog research-selection-dialog" aria-labelledby="researchSelectionTitle">
+    <form id="researchSelectionForm">
+      <div class="dialog-header"><div><span class="eyebrow">조건부 연구 선택</span><h2 id="researchSelectionTitle">연구후보 채택</h2></div><button id="closeResearchSelection" class="icon-button" type="button" aria-label="연구후보 채택 닫기">×</button></div>
+      <p class="dialog-intro">선택한 후보를 후속 연구 대상으로 기록합니다. 기존 G0/G1·HumanDecision 원본과 실험 검증 상태는 변경되지 않습니다.</p>
+      <fieldset class="research-selection-options"><legend>채택할 후보를 직접 선택하세요</legend><div id="researchSelectionCandidates"></div></fieldset>
+      <div class="form-field"><label for="selectionResearcher">연구자</label><input id="selectionResearcher" required maxlength="200" autocomplete="name"></div>
+      <div class="form-field"><label for="selectionRationale">선택 근거</label><textarea id="selectionRationale" rows="3" required maxlength="4000" placeholder="후보 선택 이유와 후속 검증 계획을 입력하세요."></textarea></div>
+      <div id="selectionLimitations" class="selection-limitations"></div>
+      <label class="review-check selection-ack"><input id="selectionAcknowledgement" type="checkbox" required> 남은 한계를 확인했으며, 이 채택은 약효·안전성 승인 또는 실험 검증 완료가 아님을 이해합니다.</label>
+      <div id="researchSelectionError" class="form-error" role="alert" hidden></div>
+      <div class="dialog-actions"><button id="cancelResearchSelection" class="button secondary" type="button">취소</button><button id="submitResearchSelection" class="button primary" type="submit">선택 후보 채택 기록</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="humanGateDialog" class="decision-dialog" aria-labelledby="decisionTitle">
+    <form id="decisionForm" method="dialog">
+      <div class="dialog-header">
+        <div class="dialog-symbol" aria-hidden="true">✓</div>
+        <div><span class="eyebrow">연구자 검토</span><h2 id="decisionTitle">연구자 최종 결정</h2></div>
+        <button class="icon-button dialog-close" type="button" aria-label="대화상자 닫기">×</button>
+      </div>
+      <p id="decisionIntro" class="dialog-intro">G1은 G0 승인 표적별 탐색 경로, 후보·실행과정·제외 정책과 표적 간 순위 무결성을 감사합니다. 연구자는 전체 표적의 실행 범위와 감사 기록을 확인한 뒤 후속 실험 후보를 선택합니다.</p>
+
+      <fieldset class="decision-options">
+        <legend>결정 선택</legend>
+        <label class="decision-option approve">
+          <input type="radio" name="decision" value="APPROVE" checked>
+          <span class="decision-radio">✓</span>
+          <span><b>검토 승인</b><small>선택 후보를 후속 실험 검토 대상으로 확정 · 실험 검증 아님</small></span>
+        </label>
+        <label class="decision-option hold">
+          <input type="radio" name="decision" value="HOLD">
+          <span class="decision-radio">Ⅱ</span>
+          <span><b>보류 종료</b><small>이 실행의 검토를 종료합니다. 계속 보완하려면 임시 보류 메모를 사용하세요.</small></span>
+        </label>
+        <label class="decision-option reject">
+          <input type="radio" name="decision" value="REJECT">
+          <span class="decision-radio">×</span>
+          <span><b>반려</b><small>현재 후보 묶음을 채택하지 않고 종료</small></span>
+        </label>
+      </fieldset>
+
+      <div id="candidateSelection" class="candidate-selection">
+        <div class="field-label"><span>후속 실험 검토 후보 선택</span><small>표적과 경로를 함께 비교해 복수 선택 가능</small></div>
+        <div id="decisionCandidates" class="decision-candidates"></div>
+      </div>
+
+      <div class="form-grid two-cols dialog-fields">
+        <div class="form-field">
+          <label for="researcherName">연구자 <span aria-hidden="true">*</span></label>
+          <input id="researcherName" name="researcher" type="text" required>
+        </div>
+        <div class="form-field wide-field">
+          <label for="decisionRationale">판단 근거 <span aria-hidden="true">*</span></label>
+          <textarea id="decisionRationale" name="rationale" rows="3" required placeholder="감사 결과와 후보 선택의 근거를 입력하십시오."></textarea>
+        </div>
+      </div>
+      <div id="decisionError" class="form-error" role="alert" hidden></div>
+      <div class="dialog-actions">
+        <button class="button secondary dialog-close" type="button">취소</button>
+        <button id="submitDecision" class="button human" type="submit">결정 기록</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="reviewActionDialog" class="decision-dialog review-action-dialog" aria-labelledby="reviewActionTitle">
+    <form id="reviewActionForm">
+      <div class="dialog-header">
+        <div><span class="eyebrow">후속 검토</span><h2 id="reviewActionTitle">자료 제출</h2></div>
+        <button id="closeReviewAction" class="icon-button" type="button" aria-label="후속 검토 닫기">×</button>
+      </div>
+      <p id="reviewActionIntro" class="dialog-intro"></p>
+      <div class="form-grid two-cols dialog-fields">
+        <div class="form-field"><label for="reviewResearcher">연구자</label><input id="reviewResearcher" required maxlength="200"></div>
+        <div class="form-field wide-field"><label for="reviewRationale">설명·판단 근거</label><textarea id="reviewRationale" rows="3" required maxlength="4000"></textarea></div>
+      </div>
+      <div id="reviewUploadFields" class="review-upload-fields" hidden>
+        <label for="reviewSourceFile">원본 자료 · PDF / CSV / JSON / TXT · 최대 5 MB</label>
+        <input id="reviewSourceFile" type="file" accept=".pdf,.csv,.json,.txt">
+        <div id="reviewObservedFields" hidden>
+          <label for="reviewObservedFile">구조화된 실험값 CSV · 원본이 같은 형식이면 생략</label>
+          <input id="reviewObservedFile" type="file" accept=".csv">
+          <button type="button" id="downloadObservedTemplate" class="button secondary">빈 CSV 양식 받기</button>
+          <p id="reviewCandidateHint"></p>
+          <label class="review-check"><input id="reviewObservedAttestation" type="checkbox"> 직접 확인한 실측 자료이며 합성 결과가 아님을 확인합니다.</label>
+          <p>제출자가 전사한 실험값은 원본 파일 해시와 연결됩니다. 파일·형식 확인만으로 효능이나 안전성이 검증되지는 않습니다.</p>
+        </div>
+      </div>
+      <div id="reviewPaidFields" hidden>
+        <p id="reviewBudgetText"></p>
+        <label class="review-check"><input id="reviewPaidConsent" type="checkbox"> 기존 실행의 남은 한도 안에서 외부 모델 재감사 비용 사용에 동의합니다.</label>
+      </div>
+      <div id="reviewActionError" class="form-error" role="alert" hidden></div>
+      <div class="dialog-actions"><button id="submitReviewAction" class="button human" type="submit">저장</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="sourceCatalogDialog" class="source-dialog" aria-labelledby="sourceCatalogTitle">
+    <div class="source-dialog-shell">
+      <div class="dialog-header source-dialog-header">
+        <div class="dialog-symbol source-dialog-symbol" aria-hidden="true">DB</div>
+        <div>
+          <span class="eyebrow">데이터 소스</span>
+          <h2 id="sourceCatalogTitle">데이터 소스 연결 현황</h2>
+        </div>
+        <button id="closeSourceCatalog" class="icon-button source-dialog-close" type="button" aria-label="데이터 소스 현황 닫기">×</button>
+      </div>
+
+      <p class="dialog-intro source-dialog-intro">
+        보고서의 데이터 소스를 어댑터 구현·설정 상태에 따라 구분합니다. 단계 표시는 해당 소스를 직접 조회하는 에이전트이며, MA3는 저장된 상위 근거를 감사합니다. ‘어댑터 활성’은 네트워크 응답 보장이 아니라 호출 경로가 준비되었다는 뜻이며, 실제 조회 여부와 성공·캐시·fallback은 실행별 근거 기록에서 확인합니다.
+      </p>
+
+      <aside class="source-routing-note">
+        <b>왜 네 그룹으로 나누나?</b>
+        <p><strong>활성</strong>은 현재 실행 가능한 어댑터, <strong>필요 시</strong>는 단계·가설·식별자·탐색 경로가 맞을 때만 실행하는 어댑터, <strong>설정 필요</strong>는 키·라이선스·로컬 데이터·사이드카가 필요한 어댑터, <strong>평가 전용</strong>은 연구 실행 어댑터에 연결하지 않고 별도 benchmark 정책에 분리 등록한 데이터셋입니다.</p>
+        <small>매 실행 시 단계에 해당하는 소스를 후보로 검토하고, 실제 호출은 MA1 기본 조회·Pharos·맥락 DB·MA2 후보 DB의 결정론적 라우터가 선택합니다. Orchestrator는 실행 단계를 고정하며, 맥락 조회는 별도의 호출 수·시간 예산도 적용합니다. 예: 세포 맥락→HCA/CELLxGENE, 발현·Tbio→GTEx/ARCHS4, 네트워크→STRING/BioGRID, Pharos·TDL 요청→Pharos, 재창출→DrugCentral/DrugBank, de novo→Google Patents 보조조회. LLM은 이 선택 정책을 우회할 수 없습니다.</small>
+      </aside>
+
+      <div id="sourceCatalogSummary" class="source-catalog-summary" aria-live="polite">
+        <span><b>—</b><small>활성 어댑터</small></span>
+        <span><b>—</b><small>연합·필요 시 조회</small></span>
+        <span><b>—</b><small>연결·설정 필요</small></span>
+        <span><b>—</b><small>평가 전용</small></span>
+      </div>
+
+      <div id="sourceCatalogContent" class="source-catalog-content" aria-live="polite">
+        <div class="source-catalog-loading"><span class="status-dot" aria-hidden="true"></span>소스 레지스트리를 불러오는 중</div>
+      </div>
+
+      <aside id="chemistryBackendNote" class="chemistry-backend-note">
+        <span aria-hidden="true">⌬</span>
+        <div>
+          <b>후보 화학 계산 · fixture</b>
+          <small>ChEMBL·BindingDB·PubChem·RCSB PDB·AlphaFold DB 공개 조회 어댑터와 계산 엔진은 서로 다릅니다. 분자 생성·도킹·ADMET 계산값은 실제 계산 도구가 연결되기 전까지 검증용 fixture로 표시됩니다.</small>
+        </div>
+      </aside>
+    </div>
+  </dialog>
+
+  <dialog id="toolTraceDialog" class="source-dialog tool-trace-dialog" aria-labelledby="toolTraceTitle">
+    <div class="source-dialog-shell">
+      <div class="dialog-header tool-trace-dialog-header">
+        <div class="dialog-symbol tool-trace-dialog-symbol" aria-hidden="true">↗</div>
+        <div>
+          <span class="eyebrow">실행 도구</span>
+          <h2 id="toolTraceTitle">실행별 모델·도구 호출 내역</h2>
+        </div>
+        <button id="closeToolTrace" class="icon-button" type="button" aria-label="모델·도구 호출 내역 닫기">×</button>
+      </div>
+
+      <p id="toolTraceIntro" class="dialog-intro tool-trace-intro">
+        모델 호출, 공개 데이터 조회, 과학 계산 도구 실행을 구분해 표시합니다.
+      </p>
+
+      <div id="toolTraceSummary" class="tool-trace-summary" aria-live="polite">
+        <span><b>—</b><small>모델 호출</small></span>
+        <span><b>—</b><small>공개 DB 조회·선택</small></span>
+        <span><b>—</b><small>과학 도구 실행</small></span>
+        <span><b>—</b><small>오류·중단</small></span>
+      </div>
+
+      <div id="toolTraceContent" class="tool-trace-content" aria-live="polite">
+        <div class="source-catalog-loading"><span class="status-dot" aria-hidden="true"></span>호출 이력을 불러오는 중</div>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <div id="sidebarScrim" class="sidebar-scrim" hidden></div>
+
+  <script src="/static/app.js?v=20260929-ma3-admission-v1" defer></script>
+</body>
+</html>

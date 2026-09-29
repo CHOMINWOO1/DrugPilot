@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "omni-drugpilot"
+version = "0.1.0"
+description = "Evidence-governed multi-agent virtual lab for hypothesis and drug candidate discovery"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "anthropic>=0.49",
+  "fastapi>=0.115",
+  "google-cloud-bigquery>=3.25",
+  "httpx>=0.28",
+  "jinja2>=3.1",
+  "langgraph>=0.4",
+  "langgraph-checkpoint-sqlite>=2.0",
+  "networkx>=3.4",
+  "openai>=1.75",
+  "pydantic>=2.10",
+  "pydantic-settings>=2.8",
+  "python-multipart>=0.0.20",
+  "truststore>=0.10.4",
+  "uvicorn[standard]>=0.34",
+]
+
+[project.optional-dependencies]
+chemistry = ["rdkit>=2024.9"]
+mcp = ["mcp>=1.6"]
+test = [
+  "hypothesis>=6.130",
+  "pytest>=8.3",
+  "pytest-asyncio>=0.26",
+  "pytest-cov>=6.1",
+]
+
+[project.scripts]
+drugpilot = "drugpilot.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/drugpilot"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["drugpilot"]
+branch = true
